@@ -14,8 +14,8 @@ Subsequent state updates are handled by the `#update_status` method, which accep
 
 Using the `raw_status` attribute and the method that matches the action argument, the article state will be operated on accordingly. After the state is operated on, a string representing its current state will be returned.
 
-If the respective class does not have a method that aligns with the supplied action, an error will be raised. 
+If the respective class does not have a method that aligns with the supplied action, an error will be raised.
 
 Additional article methods include:
-* @article#get_options: returns array of possible actions available given an @article's current state
-* @article#status: returns string representing current state
+* `@article#get_options`: returns array of possible actions available given an @article's current state
+* `@article#status`: returns string representing current state
