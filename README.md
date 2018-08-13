@@ -1,5 +1,7 @@
 # ruby-state-machine
 
+See it in action with a simple CLI [https://repl.it/@siobhanpmahoney/Ellevest-State-Machine](here).
+
 # Overview:
 
 State is represented as an attribute of an `Article` instance (`raw_status`).
