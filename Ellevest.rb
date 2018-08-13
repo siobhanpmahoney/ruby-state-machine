@@ -1,5 +1,12 @@
-module StateMachine
 
+
+
+#   Each state option is represented by a class grouped together in the StateMachine module
+#   The respective steps available for a given state are represented by instance methods
+
+
+module StateMachine
+#   #cancel method accessible to all State classes
   def cancel
     StateMachine::Canceled.new()
   end
@@ -106,7 +113,6 @@ end
 
 
 class Article
-
   include StateMachine
   attr_accessor :raw_status
 
