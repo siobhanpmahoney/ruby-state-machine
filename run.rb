@@ -58,7 +58,7 @@ def create_article
 end
 
 def get_options(a)
-  (a.status.methods - Object.methods).select do |op|
+  (a.raw_status.methods - Object.methods).select do |op|
     op != :update_status && op != :get_options
   end
 end
@@ -68,7 +68,7 @@ end
 
 
 def print_article_status(article)
-  article.status.class.to_s.split("::")[1]
+  article.status
 end
 
 
