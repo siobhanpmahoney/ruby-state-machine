@@ -7,7 +7,7 @@ module StateMachine
 
   class CommandError < StandardError
     def message(article, command)
-      "#{command.upcase} is not a valid command for articles with a #{article.raw_status.class.to_s.split("::")[1].upcase} raw_status"
+      "#{command.upcase} is not a valid command for articles with #{article.raw_status.class.to_s.split("::")[1].upcase} status"
     end
   end
 
@@ -124,6 +124,7 @@ class Article
         x = @raw_status.method(command)
         @raw_status = x.call
       end
+      status
     else
       begin
         raise CommandError
@@ -135,6 +136,10 @@ class Article
 
   def get_options
     @raw_status.methods - Object.methods
+  end
+
+  def status
+    @raw_status.class.to_s.split("::")[1]
   end
 
 end
