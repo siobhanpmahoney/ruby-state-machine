@@ -1,7 +1,30 @@
+=begin
+# Overview:
 
+State is represented as an attribute of an `Article` instance (`raw_status`).
+
+Each State option is represented by a class, which are all grouped together in the `StateMachine` module. The respective steps available for a given state are represented by instance methods.
+
+## State Updates
+
+Article instances are initialized with a `raw_status` set to `Creation.new()`.
+
+Subsequent state updates are handled by the `#update_status` method, which accepts an action as an argument.
+
+Using the `raw_status` attribute and the method that matches the action argument, the article state will be operated on accordingly. After the state is operated on, a string representing its current state will be returned.
+
+If the respective class does not have a method that aligns with the supplied action, an error will be raised.
+
+Additional article methods include:
+* `@article#get_options`: returns array of possible actions available given an @article's current state
+* `@article#status`: returns string representing current state
+
+=end
 
 module StateMachine
 
+
+# command accessible to all States
   def cancel
     StateMachine::Canceled.new()
   end
@@ -13,6 +36,8 @@ module StateMachine
     end
   end
 
+
+# begin State class definitions
 
   class Creation
     include StateMachine
@@ -105,6 +130,7 @@ module StateMachine
 
 end
 
+# end State class definitions
 
 
 class Article
@@ -112,6 +138,7 @@ class Article
   attr_accessor :raw_status
 
   def initialize()
+    # initialize with raw_status set to a new instance of the Creation class
     @raw_status = StateMachine::Creation.new()
   end
 
@@ -119,8 +146,10 @@ class Article
     if @raw_status.respond_to?(command)
       if command === "cancel"
         @raw_status = self.cancel
+        # preventing future updates to Article instance if #cancel called
         self.freeze
       else
+        #dynamically calling method based on current state and provided action
         x = @raw_status.method(command)
         @raw_status = x.call
       end
@@ -134,10 +163,14 @@ class Article
     end
   end
 
+
+# get actions available to article in its current state
   def get_options
     @raw_status.methods - Object.methods
   end
 
+  
+# print current state in easy-to-read format
   def status
     @raw_status.class.to_s.split("::")[1]
   end
