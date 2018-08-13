@@ -1,27 +1,5 @@
 module StateMachine
 
-  def update_status(command)
-    if self.status.respond_to?(command)
-      if command === "cancel"
-        self.status = self.cancel
-        self.freeze
-      else
-        x = self.status.method(command)
-        self.status = x.call
-      end
-    else
-      begin
-        raise CommandError
-      rescue CommandError => error
-        puts error.message(self,command)
-      end
-    end
-  end
-
-  def get_options
-    self.status.methods - Object.methods
-  end
-
   def cancel
     StateMachine::Canceled.new()
   end
@@ -32,7 +10,6 @@ module StateMachine
       "#{command.upcase} is not a valid command for articles with a #{article.status.class.to_s.split("::")[1].upcase} status"
     end
   end
-
 
 
   class Creation
@@ -137,4 +114,27 @@ class Article
     @status = StateMachine::Creation.new()
     # @status_state = @status.class.to_s.split("::").
   end
+
+  def update_status(command)
+    if self.status.respond_to?(command)
+      if command === "cancel"
+        self.status = self.cancel
+        self.freeze
+      else
+        x = self.status.method(command)
+        self.status = x.call
+      end
+    else
+      begin
+        raise CommandError
+      rescue CommandError => error
+        puts error.message(self,command)
+      end
+    end
+  end
+
+  def get_options
+    self.status.methods - Object.methods
+  end
+
 end
