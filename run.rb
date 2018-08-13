@@ -14,7 +14,7 @@ def cli_interface
       puts get_options(@a)
     elsif input.start_with?("command:")
       puts "-----------------------------------------------------------------------------"
-      @a.update_status(@a, input.split(": ")[1])
+      @a.update_status(input.split(": ")[1])
       puts "Article's status has been updated to: #{print_article_status(@a)}"
       puts "Availble actions include: #{get_options(@a)}"
     elsif input == "help"
@@ -59,7 +59,7 @@ end
 
 def get_options(a)
   (a.status.methods - Object.methods).select do |op|
-    op != :update_status
+    op != :update_status && op != :get_options
   end
 end
 

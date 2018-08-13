@@ -1,21 +1,25 @@
 module StateMachine
 
-  def update_status(article, command)
-    if article.status.respond_to?(command)
+  def update_status(command)
+    if self.status.respond_to?(command)
       if command === "cancel"
-        article.status = article.cancel
-        article.freeze
+        self.status = self.cancel
+        self.freeze
       else
-        x = article.status.method(command)
-        article.status = x.call
+        x = self.status.method(command)
+        self.status = x.call
       end
     else
       begin
         raise CommandError
       rescue CommandError => error
-        puts error.message(article,command)
+        puts error.message(self,command)
       end
     end
+  end
+
+  def get_options
+    self.status.methods - Object.methods
   end
 
   def cancel
@@ -125,22 +129,12 @@ end
 
 
 class Article
-  
+
   include StateMachine
-  attr_accessor :status
+  attr_accessor :status, :status_state
 
   def initialize()
     @status = StateMachine::Creation.new()
+    # @status_state = @status.class.to_s.split("::").
   end
 end
-
-@art = Article.new()
-
-@art.status # <StateMachine::Creation:0x000055da2acb6fb0>
-
-
-@art.update_status(@art, "accept")
-
-@art.update_status(@art, "accept")
-
-@art.status.class.to_s.split("::")[1]
